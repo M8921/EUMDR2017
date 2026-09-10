@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EU MDR & IVDR Regulatory Classification Engine v3</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app-container">
+    <main>
+      <header>
+        <h1>EU Classification Engine v3</h1>
+        <p>Comprehensive regulatory rule engine compliant with EU MDR 2017/745, EU IVDR 2017/746, and MDCG Guidance.</p>
+      </header>
+
+      <!-- SECTION 0: QUALIFICATION GATEKEEPER -->
+      <section class="card">
+        <h2>0. Qualification Gatekeeper (MDR Art. 2 &amp; Art. 1(6))</h2>
+        <div class="form-group">
+          <label>Primary Intended Mode of Action:</label>
+          <div class="radio-group">
+            <label><input type="radio" name="moa" value="physical" checked /> Physical, mechanical, or chemical barrier</label>
+            <label><input type="radio" name="moa" value="pim" /> Pharmacological, Immunological, or Metabolic (PIM)</label>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="checkbox-label">
+            <input type="checkbox" id="annex_xvi" />
+            Device without a medical purpose listed under <strong>Annex XVI</strong> (e.g., cosmetic lenses, dermal fillers, lipolysis lasers)
+          </label>
+        </div>
+      </section>
+
+      <!-- SECTION 1: FRAMEWORK SELECTOR -->
+      <section class="card">
+        <h2>1. Regulatory Framework</h2>
+        <div class="radio-group">
+          <label><input type="radio" name="framework" value="mdr" checked /> Medical Device Regulation (EU MDR 2017/745)</label>
+          <label><input type="radio" name="framework" value="ivdr" /> In Vitro Diagnostic Regulation (EU IVDR 2017/746)</label>
+        </div>
+      </section>
+
+      <!-- MDR SECTION -->
+      <div id="mdr_section">
+        <!-- Duration & Invasiveness -->
+        <section class="card">
+          <h2>2. Contact, Cumulative Duration &amp; Invasiveness</h2>
+          
+          <div class="form-group">
+            <label>Single Unit Contact Time:</label>
+            <select id="single_duration">
+              <option value="transient">Transient (&lt; 60 minutes)</option>
+              <option value="short_term">Short-term (60 mins to 30 days)</option>
+              <option value="long_term">Long-term (&gt; 30 days)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="checkbox-label">
+              <input type="checkbox" id="is_regularly_replaced" />
+              <strong>Rule 3.7 Cumulative Duration:</strong> Is the device immediately replaced by an identical/similar device for continuous therapy?
+            </label>
+          </div>
+
+          <div class="form-group" id="total_days_container" style="display:none;">
+            <label>Total Continuous Duration across all units (Days):</label>
+            <input type="number" id="total_continuous_days" min="1" value="1" />
+          </div>
+
+          <div class="form-group">
+            <label>Invasiveness &amp; Contact Surface:</label>
+            <select id="invasiveness">
+              <option value="non_invasive">Non-invasive (Skin, indirect contact, body liquids channeling)</option>
+              <option value="orifice">Invasive via body orifice or stoma (not surgically)</option>
+              <option value="surgically">Surgically invasive</option>
+              <option value="implantable">Implantable device</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Special Anatomical Target Sites:</label>
+            <div class="checkbox-grid">
+              <label><input type="checkbox" id="site_cns" /> Central Nervous System / Spine</label>
+              <label><input type="checkbox" id="site_circulatory" /> Central Circulatory System</label>
+              <label><input type="checkbox" id="site_teeth" /> Oral cavity / Teeth up to pharynx only</label>
+              <label><input type="checkbox" id="site_injured_skin" /> Injured skin / Wounds (Rule 4)</label>
+            </div>
+          </div>
+        </section>
+
+        <!-- Software / Active Devices (Rule 11 Matrix) -->
+        <section class="card">
+          <h2>3. Active Devices &amp; Software (MDCG 2019-11 / Rule 11)</h2>
+          <div class="form-group">
+            <label class="checkbox-label">
+              <input type="checkbox" id="is_active" />
+              Active Medical Device / Software as a Medical Device (SaMD)
+            </label>
+          </div>
+
+          <div id="active_fields" style="display:none;">
+            <div class="form-group">
+              <label class="checkbox-label">
+                <input type="checkbox" id="rule3_3_drives" />
+                <strong>Implementing Rule 3.3:</strong> Drives or influences the use of a hardware device
+              </label>
+              <div id="driven_device_container" style="display:none; margin-top: 8px;">
+                <label>Classification of Driven Hardware Device:</label>
+                <select id="driven_device_class">
+                  <option value="I">Class I</option>
+                  <option value="IIa">Class IIa</option>
+                  <option value="IIb">Class IIb</option>
+                  <option value="III">Class III</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Software Core Purpose (Rule 11):</label>
+              <select id="samd_purpose">
+                <option value="none">Not Standalone Software (Hardware Only)</option>
+                <option value="diag_therap">Provides information used to take decisions with diagnostic or therapeutic purposes (Rule 11a)</option>
+                <option value="monitoring">Monitors physiological processes (Rule 11b)</option>
+                <option value="other_samd">Other software (General healthcare/archival)</option>
+              </select>
+            </div>
+
+            <div class="form-group" id="samd_severity_container" style="display:none;">
+              <label>Impact of Erroneous Diagnostic/Therapeutic Decision:</label>
+              <select id="samd_severity">
+                <option value="minor">Non-serious / Minor outcome (Class IIa)</option>
+                <option value="serious">May cause serious deterioration of health or surgical intervention (Class IIb)</option>
+                <option value="critical">May cause death or irreversible deterioration of health (Class III)</option>
+              </select>
+            </div>
+
+            <div class="form-group" id="samd_monitoring_container" style="display:none;">
+              <label class="checkbox-label">
+                <input type="checkbox" id="vital_danger" />
+                Monitors vital physiological parameters where variations could result in immediate danger to the patient (Class IIb)
+              </label>
+            </div>
+          </div>
+        </section>
+
+        <!-- Substance-based devices (Rule 21) & Special Rules -->
+        <section class="card">
+          <h2>4. Substances &amp; Special Rules (Rules 14-22)</h2>
+          <div class="form-group">
+            <label class="checkbox-label">
+              <input type="checkbox" id="is_substance" />
+              <strong>Rule 21:</strong> Device composed of substances/combinations of substances introduced into the body
+            </label>
+          </div>
+
+          <div id="substance_fields" style="display:none;">
+            <div class="form-group">
+              <label>Anatomical Delivery Route:</label>
+              <select id="substance_route">
+                <option value="skin">Applied to skin only</option>
+                <option value="cavity">Nasal/oral cavity to pharynx, or ear to eardrum</option>
+                <option value="gi_orifice">Stomach or lower GI tract / other body orifices</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="checkbox-label">
+                <input type="checkbox" id="systemic_absorption" />
+                Device (or its metabolites) is systemically absorbed to achieve its intended purpose
+              </label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Additional Characteristics:</label>
+            <div class="checkbox-grid">
+              <label><input type="checkbox" id="rule14_drug" /> Incorporates ancillary medicinal substance or human blood derivative (Rule 14 &rarr; Class III)</label>
+              <label><input type="checkbox" id="rule18_tissue" /> Utilizes non-viable animal or human tissues/cells (Rule 18 &rarr; Class III)</label>
+              <label><input type="checkbox" id="rule19_nano" /> Incorporates nanomaterials with high/medium internal exposure potential (Rule 19 &rarr; Class III)</label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Class I Sub-class Qualifiers (Art. 52(7)):</label>
+            <div class="checkbox-grid">
+              <label><input type="checkbox" id="is_sterile" /> Supplied sterile (Is)</label>
+              <label><input type="checkbox" id="is_measuring" /> Possesses a measuring function (Im)</label>
+              <label><input type="checkbox" id="is_reusable_surgical" /> Reusable surgical instrument (Ir - Rule 6)</label>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- IVDR SECTION -->
+      <div id="ivdr_section" style="display:none;">
+        <section class="card">
+          <h2>2. IVDR Intended Targets &amp; Multiplex Configuration (Annex VIII)</h2>
+          <p class="section-desc">Select all analytes detected by the assay. Worst-case analyte governs under Rule 1.7.</p>
+          
+          <div class="form-group">
+            <label>Target Analytes / Clinical Scope:</label>
+            <div class="checkbox-grid">
+              <label><input type="checkbox" class="ivd_target" value="r1_transfusion" /> Screening blood/tissues for transfusion or transmissible agents (HIV, HCV, HBV, Ebola, Marburg) [Rule 1 &rarr; Class D]</label>
+              <label><input type="checkbox" class="ivd_target" value="r2_bloodgroup_high" /> High-risk blood grouping: ABO, Rh (C, c, D, E, e), Kell, Kidd, Duffy [Rule 2 &rarr; Class D]</label>
+              <label><input type="checkbox" class="ivd_target" value="r2_bloodgroup_other" /> Other blood grouping systems (e.g., MNS, Lutheran) [Rule 2 &rarr; Class C]</label>
+              <label><input type="checkbox" class="ivd_target" value="r3_infectious_high" /> Infectious agents with high risk of severe disability / propagation (e.g., Influenza A/B, RSV, SARS-CoV-2) [Rule 3a &rarr; Class C]</label>
+              <label><input type="checkbox" class="ivd_target" value="r3_cdx" /> Companion Diagnostic (CDx) [Rule 3f &rarr; Class C]</label>
+              <label><input type="checkbox" class="ivd_target" value="r3_cancer" /> Cancer screening, staging, or monitoring [Rule 3c &rarr; Class C]</label>
+              <label><input type="checkbox" class="ivd_target" value="r3_prenatal" /> Prenatal screening for congenital disorders [Rule 3e &rarr; Class C]</label>
+              <label><input type="checkbox" class="ivd_target" value="r5_labware" /> General laboratory instrument, buffer, wash solution, stain [Rule 5 &rarr; Class A]</label>
+              <label><input type="checkbox" class="ivd_target" value="r5_receptacle" /> Specimen receptacle [Rule 5a &rarr; Class A]</label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>User Profile / Location of Testing (Rule 4):</label>
+            <select id="ivd_user_type">
+              <option value="professional">Professional Laboratory Use</option>
+              <option value="poct">Near-Patient Testing (PoCT) by healthcare professional</option>
+              <option value="selftest">Self-testing by a layperson (Rule 4)</option>
+            </select>
+          </div>
+
+          <div class="form-group" id="selftest_exemptions" style="display:none;">
+            <label class="checkbox-label">
+              <input type="checkbox" id="selftest_b_exception" />
+              Self-test specifically for pregnancy, fertility, or cholesterol/glucose monitoring (Class B exception per Rule 4b)
+            </label>
+          </div>
+
+          <div class="form-group">
+            <label>Control Material Configuration (Rule 7):</label>
+            <select id="ivd_control_type">
+              <option value="none">Assay / Test Device (Not a control)</option>
+              <option value="control_assigned">Control material with assigned quantitative/qualitative values (Takes Class of target assay)</option>
+              <option value="control_unassigned">Control material without assigned values (Rule 7 &rarr; Class B)</option>
+            </select>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <!-- VERDICT SIDEBAR -->
+    <aside class="sidebar">
+      <div class="card verdict-card">
+        <h2>Regulatory Verdict</h2>
+        <div id="verdict_placeholder">
+          <p class="status-evaluating">Configuring profile...</p>
+        </div>
+
+        <div id="verdict_result" style="display:none;">
+          <div class="badge-container">
+            <span id="final_badge" class="badge">Class I</span>
+          </div>
+
+          <div class="verdict-detail">
+            <strong>Applicable Framework:</strong>
+            <span id="res_framework">EU MDR 2017/745</span>
+          </div>
+
+          <div class="verdict-detail">
+            <strong>Notified Body Involvement:</strong>
+            <span id="res_nb">Mandatory</span>
+          </div>
+
+          <div class="verdict-detail">
+            <strong>Conformity Assessment Route:</strong>
+            <p id="res_route" class="assessment-route"></p>
+          </div>
+
+          <div class="audit-trail">
+            <strong>Rule Evaluation Audit Trail:</strong>
+            <ul id="res_rules_list"></ul>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <script src="engine.js"></script>
+</body>
+</html>
