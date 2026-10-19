@@ -333,7 +333,12 @@
     if (sp.tissues === 'human' || sp.tissues === 'animal') {
       hits.push(hit('Rule 18', 'III', `Manufactured using non-viable tissues or cells of ${sp.tissues} origin, or their derivatives.`, 'Annex VIII 7.5'));
     } else if (sp.tissues === 'animal_intact_skin') {
-      notes.push('Rule 18 exception: non-viable animal tissue or derivatives that only contact intact skin, so Rule 18 does not raise the class.');
+      // The exception only holds for devices that touch intact skin and nothing else.
+      if (inv === 'non_invasive' && (!p.injuredSkin || p.injuredSkin === 'none')) {
+        notes.push('Rule 18 exception: non-viable animal tissue or derivatives that only contact intact skin, so Rule 18 does not raise the class.');
+      } else {
+        hits.push(hit('Rule 18', 'III', 'Non-viable animal tissue or derivatives. The intact-skin exception does not apply, because the device is invasive or contacts injured skin or mucous membrane.', 'Annex VIII 7.5'));
+      }
     }
 
     const r19 = { high: 'III', medium: 'III', low: 'IIb', negligible: 'IIa' }[sp.nanomaterial];
@@ -380,7 +385,7 @@
       rule12IIb: hits.some((h) => h.rule === 'Rule 12' && h.class === 'IIb'),
       rule14: ruleNumbers('Rule 14'),
       rule18Human: sp.tissues === 'human',
-      rule21: ruleNumbers('Rule 21'),
+      rule21Systemic: !!(sub.isSubstance && sub.systemicAbsorption),
     });
 
     return {
@@ -446,16 +451,22 @@
       notifiedBody = 'Required';
       route.push('Annex IX Chapters I, II and III (full QMS and assessment of technical documentation), or Annex X (EU type-examination) with Annex XI (product conformity verification) (Art. 52(3)).');
       if (o.implantable) route.push('Implantable class III device: clinical evaluation consultation procedure with an expert panel (Art. 54, Annex IX Section 5.1).');
-      route.push('Clinical investigation required unless an Art. 61(4)-(6) exemption applies.');
+    }
+    if (cls === 'III' || o.implantable) {
+      route.push('Clinical investigation required for implantable and class III devices unless an Art. 61(4)-(6) exemption applies (e.g. sutures, staples, dental fillings, screws, plates under Art. 61(6)(b)).');
+    }
+    if ((cls === 'III' && o.implantable) || o.rule12IIb) {
+      route.push('Art. 54(2) lists the cases where this consultation is not required, such as certain modifications of a certified device or compliance with Common Specifications.');
     }
     if (o.rule14) route.push('Rule 14: Notified Body must consult a medicines authority or the EMA on the ancillary medicinal substance (Annex IX Section 5.2).');
     if (o.rule18Human) route.push('Rule 18 (human tissue): consult a competent authority for human tissues and cells (Annex IX Section 5.3).');
-    if (o.rule21 && (cls === 'III' || cls === 'IIb')) route.push('Rule 21: for systemically absorbed substances, consult a medicines authority or the EMA (Annex IX Section 5.4).');
-    if (cls === 'III' || (cls === 'IIb' && o.implantable)) {
-      route.push('Summary of safety and clinical performance (SSCP) required (Art. 32).');
+    if (o.rule21Systemic) route.push('Rule 21: for systemically absorbed substances, consult a medicines authority or the EMA (Annex IX Section 5.4).');
+    if (cls === 'III' || o.implantable) {
+      route.push('Summary of safety and clinical performance (SSCP) required for implantable and class III devices (Art. 32).');
     }
     if (cls === 'IIb' || cls === 'III') route.push('PSUR updated at least annually (Art. 86).');
-    if (cls === 'IIa') route.push('PSUR updated at least every two years (Art. 86).');
+    if (cls === 'IIa') route.push('PSUR updated when necessary and at least every two years (Art. 86).');
+    if (cls === 'I') route.push('Post-market surveillance report, updated when necessary (Art. 85).');
     return { notifiedBody, route };
   }
 
@@ -526,7 +537,8 @@
     }
 
     // Rule 4: self-testing / near-patient testing.
-    if (p.user === 'self_test' && analyteBased) {
+    // Rule 4 also covers instruments for self-testing (e.g. blood glucose meters), see MDCG 2020-16.
+    if (p.user === 'self_test' && type !== 'general_lab' && type !== 'receptacle') {
       hits.push(
         p.selfTestException
           ? hit('Rule 4(a)', 'B', 'Self-test for pregnancy, fertility, cholesterol, or glucose, erythrocytes, leucocytes or bacteria in urine.', 'IVDR Annex VIII 2.4')
@@ -599,6 +611,7 @@
     if (o.cdx) route.push('Companion diagnostic: Notified Body consults a medicines authority or the EMA (Annex IX Section 5.2).');
     if (o.selfOrNearPatient && cls !== 'A') route.push('Self-testing or near-patient device: Notified Body assesses the technical documentation for those aspects (Annex IX Section 5.1).');
     if (cls === 'C' || cls === 'D') route.push('Summary of safety and performance (SSP) required (Art. 29); PSUR updated at least annually (Art. 81).');
+    if (cls === 'A' || cls === 'B') route.push('Post-market surveillance report, updated when necessary (Art. 80).');
     return { notifiedBody, route };
   }
 

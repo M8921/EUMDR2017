@@ -48,3 +48,20 @@ This review covers the version of `index.html` committed on 10 September 2026 (c
 
 - The European Commission's December 2025 proposal to revise the MDR and IVDR, discussed in the MedTech Europe paper of 5 May 2026 in the project knowledge folder, is not law yet. The engine follows Annex VIII as currently in force.
 - MDCG 2020-16 contains pathogen-specific IVDR examples such as SARS-CoV-2. The engine asks for the purpose, not the pathogen, so the user applies MDCG 2020-16 when choosing the indent.
+
+## Second expert review of v4 (19 October 2026)
+
+Two passes over v4. The first checked each MDR rule against the Annex VIII text. The second checked edge cases, the implementing rules, the IVDR side and the conformity routes. No class outcome in the 101 v3 reference cases changed. These are the gaps that were fixed:
+
+| # | Finding | Provision | Fix |
+|---|---------|-----------|-----|
+| 28 | The Rule 18 intact-skin exception was accepted for implants and wound-contact devices. It only covers animal material that contacts intact skin alone. | Rule 18 | The exception now applies only to non-invasive devices with no injured-skin contact; otherwise class III. |
+| 29 | IVDR Rule 4 was skipped for instruments, so a self-testing blood glucose meter came out class A. MDCG 2020-16 classifies self-testing instruments under Rule 4. | IVDR Rule 4(a), Rule 5(b) | Rule 4 now applies to instruments for self-testing (class C). |
+| 30 | Clinical investigation was listed only for class III. Art. 61(4) also covers implantable devices of any class. | Art. 61(4), 61(6)(b) | Listed for every implantable device, with the Art. 61(6)(b) exemption list. |
+| 31 | SSCP was listed for class III and implantable class IIb only. Art. 32 covers all implantable devices, including class IIa dental implants. | Art. 32 | Listed for every implantable device. |
+| 32 | The Annex IX 5.4 medicines-authority consultation was shown for every class IIb or III Rule 21 device. It concerns substances that are systemically absorbed. | Annex IX 5.4 | Shown only when systemic absorption is selected. |
+| 33 | The Art. 54(2) exemptions from the expert panel consultation were not mentioned. | Art. 54(2) | Added as a note. |
+| 34 | Class I MDR and class A or B IVDR devices had no post-market obligation listed. | MDR Art. 85, IVDR Art. 80 | PMS report added. |
+| 35 | The form did not define the central circulatory system or the central nervous system. Users could tick "direct contact" for a femoral-artery device, which is not central, and get class III. | Annex VIII 1.7, 1.8 | The vessel list and CNS definition are shown in section 7. |
+| 36 | "Reusable surgical instrument" was not defined. Powered or active-connected instruments could be marked Ir. | Annex VIII Chapter I definitions | Definition shown next to the checkbox. |
+| 37 | Implementing rule 3.4 (use in several parts of the body: classify on the most critical use) was not mentioned. | Annex VIII 3.4 | Hint added to the duration section. |

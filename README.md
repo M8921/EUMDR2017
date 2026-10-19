@@ -18,7 +18,7 @@ Open `index.html` in a browser. It needs no build step or server and also works 
 | `engine.js` | Classification logic. Pure functions `classifyMDR(profile)` and `classifyIVDR(profile)`; the profile format is documented at the top of the file. Runs in the browser and in Node. |
 | `app.js` | Connects the form to the engine. Each input's `data-path` names its field in the profile. |
 | `index.html`, `style.css` | The form and the result panel. |
-| `test/engine.test.js` | 101 reference cases based on Annex VIII and the examples in MDCG 2021-24 and MDCG 2020-16. |
+| `test/engine.test.js` | 106 reference cases based on Annex VIII and the examples in MDCG 2021-24 and MDCG 2020-16. |
 | `REVIEW.md` | Flaws found in v3 and how v4 fixes them. |
 
 ## Tests

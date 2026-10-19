@@ -53,7 +53,7 @@
               <option value="short">Short-term (60 minutes to 30 days)</option>
               <option value="long">Long-term (&gt; 30 days)</option>
             </select>
-            <p class="hint">Temporary interruptions for a procedure or removal for cleaning do not break continuous use (rule 3.6(a)).</p>
+            <p class="hint">Temporary interruptions for a procedure or removal for cleaning do not break continuous use (rule 3.6(a)). A device not used solely or principally in one part of the body is classified on its most critical specified use (rule 3.4).</p>
           </div>
           <div class="form-group">
             <label class="checkbox-label"><input type="checkbox" data-path="replacedImmediately" /> Replaced immediately by another device of the same type (rule 3.6(b))</label>
@@ -132,10 +132,11 @@
         <!-- Surgical / implantable: Rules 6-8 -->
         <section class="card" data-show-if="invasiveness=surgical,implantable">
           <h2>7. Surgically invasive &amp; implantable (Rules 6&ndash;8)</h2>
+          <p class="hint">Central circulatory system (Annex VIII 1.7): pulmonary arteries and veins, ascending and descending aorta to the bifurcation, aortic arch, coronary arteries, common, external and internal carotid arteries, cerebral arteries, brachiocephalic trunk, cardiac veins, superior and inferior vena cava. Femoral and other peripheral vessels are not included. Central nervous system (1.8): brain, meninges and spinal cord.</p>
           <div class="checkbox-grid">
             <label><input type="checkbox" data-path="surgical.heartCirculatoryDefect" /> Controls, diagnoses, monitors or corrects a defect of the heart or central circulatory system by direct contact</label>
             <label><input type="checkbox" data-path="surgical.directContactHeartCirculatoryCNS" /> Direct contact with the heart, central circulatory system or central nervous system</label>
-            <label data-show-if="invasiveness=surgical"><input type="checkbox" data-path="surgical.reusableInstrument" /> Reusable surgical instrument (Rule 6)</label>
+            <label data-show-if="invasiveness=surgical"><input type="checkbox" data-path="surgical.reusableInstrument" /> Reusable surgical instrument (Rule 6): cuts, drills, saws, scratches, scrapes, clamps, retracts or clips, is not connected to an active device, and is intended to be reused</label>
             <label><input type="checkbox" data-path="surgical.ionisingRadiation" /> Supplies energy as ionising radiation (Rules 6, 7)</label>
             <label><input type="checkbox" data-path="surgical.biologicalEffectOrAbsorbed" /> Has a biological effect or is wholly or mainly absorbed</label>
             <label><input type="checkbox" data-path="surgical.chemicalChange" /> Undergoes chemical change in the body (Rules 7, 8)</label>
@@ -319,7 +320,7 @@
           <div class="checkbox-grid" id="ivd_purposes"></div>
         </section>
 
-        <section class="card" data-show-if="productType=assay,calibrator,control_assigned,software">
+        <section class="card" data-show-if="productType=assay,calibrator,control_assigned,software,instrument">
           <h2>4. User (Rule 4)</h2>
           <div class="form-group">
             <select id="ivd_user" data-path="user">
