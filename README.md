@@ -18,7 +18,7 @@ Open `index.html` in a browser. It needs no build step or server and also works 
 | `engine.js` | Classification logic. Pure functions `classifyMDR(profile)` and `classifyIVDR(profile)`; the profile format is documented at the top of the file. Runs in the browser and in Node. |
 | `app.js` | Connects the form to the engine. Each input's `data-path` names its field in the profile. |
 | `index.html`, `style.css` | The form and the result panel. |
-| `test/engine.test.js` | 101 reference cases based on Annex VIII and the examples in MDCG 2021-24 and MDCG 2020-16. |
+| `test/engine.test.js` | 108 reference cases based on Annex VIII and the examples in MDCG 2021-24 and MDCG 2020-16. |
 | `REVIEW.md` | Flaws found in v3 and how v4 fixes them. |
 
 ## Tests
@@ -30,3 +30,11 @@ node --test
 ## Disclaimer
 
 This is decision support. Under Art. 51 the manufacturer is responsible for classification, and disputes go to the competent authority. Use it together with MDCG 2021-24 (devices), MDCG 2019-11 (software) and MDCG 2020-16 (IVDs).
+
+## Run on localhost
+
+```
+python -m http.server 8000
+```
+
+Then open http://localhost:8000. On Windows you can double-click `start-windows.bat`; on macOS or Linux run `sh start-mac-linux.sh`.

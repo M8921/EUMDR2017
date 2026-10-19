@@ -162,3 +162,50 @@ test('IVDR: sterile class A needs a Notified Body for sterility', () => {
   assert.equal(r.label, 'Class A (sterile)');
   assert.match(r.notifiedBody, /sterility/);
 });
+
+// Expert review round 2
+test('MDR Rule 18: intact-skin exception does not apply to invasive devices', () => {
+  assert.equal(classifyMDR({ special: { tissues: 'animal_intact_skin' } }).class, 'I');
+  assert.equal(classifyMDR({ invasiveness: 'implantable', special: { tissues: 'animal_intact_skin' } }).class, 'III');
+  assert.equal(classifyMDR({ injuredSkin: 'barrier', special: { tissues: 'animal_intact_skin' } }).class, 'III');
+});
+
+test('MDR: implantable class IIb and IIa devices need SSCP and clinical investigation', () => {
+  const plate = classifyMDR({ invasiveness: 'implantable', surgical: { ancillaryComponent: true } });
+  assert.ok(plate.route.some((s) => s.includes('Art. 32')));
+  assert.ok(plate.route.some((s) => s.includes('Art. 61')));
+  const filling = classifyMDR({ invasiveness: 'implantable', surgical: { placedInTeeth: true } });
+  assert.equal(filling.class, 'IIa');
+  assert.ok(filling.route.some((s) => s.includes('Art. 32')));
+});
+
+test('MDR Rule 21: medicines authority consultation only when systemically absorbed', () => {
+  const local = classifyMDR({ special: { substance: { isSubstance: true, route: 'gi' } } });
+  assert.ok(!local.route.some((s) => s.includes('5.4')));
+  const systemic = classifyMDR({ special: { substance: { isSubstance: true, route: 'gi', systemicAbsorption: true } } });
+  assert.ok(systemic.route.some((s) => s.includes('5.4')));
+});
+
+test('MDR class I: post-market surveillance report listed', () => {
+  assert.ok(classifyMDR({}).route.some((s) => s.includes('Art. 85')));
+});
+
+test('IVDR Rule 4: self-testing instrument (blood glucose meter) is class C', () => {
+  assert.equal(classifyIVDR({ productType: 'instrument', user: 'self_test' }).class, 'C');
+  assert.equal(classifyIVDR({ productType: 'instrument' }).class, 'A');
+});
+
+// Expert review round 3
+test('MDR Art. 52(4): non-absorbable suture (IIb implant on the WET list) is not assessed device by device', () => {
+  const r = classifyMDR({ invasiveness: 'implantable', surgical: { wetListed: true } });
+  assert.equal(r.class, 'IIb');
+  assert.ok(r.route.some((s) => s.includes('Well-established technology')));
+  assert.ok(!r.route.some((s) => s.includes('every implantable class IIb')));
+});
+
+test('MDR Art. 52(8): custom-made devices get the Annex XIII route', () => {
+  const crown = classifyMDR({ invasiveness: 'implantable', surgical: { placedInTeeth: true }, qualification: { customMade: true } });
+  assert.match(crown.route[0], /Annex XIII/);
+  const cranial = classifyMDR({ invasiveness: 'implantable', surgical: { directContactHeartCirculatoryCNS: true }, qualification: { customMade: true } });
+  assert.match(cranial.route[0], /Annex IX Chapter I or Annex XI Part A/);
+});
