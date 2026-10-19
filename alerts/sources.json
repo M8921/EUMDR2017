@@ -1,0 +1,115 @@
+{
+  "_comment": "Regulator feeds read by alerts/collector.py. Set \"enabled\": false to skip one. Types: rss (RSS or Atom), openfda, govuk_search, healthcanada_json. {from} and {to} in openFDA URLs are filled with dates (YYYYMMDD) covering the last 365 days.",
+  "sources": [
+    {
+      "id": "fda-device-recalls",
+      "agency": "FDA",
+      "country": "United States",
+      "name": "Device recalls (enforcement reports, openFDA)",
+      "type": "openfda",
+      "url": "https://api.fda.gov/device/enforcement.json?search=report_date:[{from}+TO+{to}]&sort=report_date:desc&limit=100",
+      "product": "Medical device",
+      "kind": "Recall",
+      "enabled": true
+    },
+    {
+      "id": "fda-drug-recalls",
+      "agency": "FDA",
+      "country": "United States",
+      "name": "Drug and biologic recalls (enforcement reports, openFDA)",
+      "type": "openfda",
+      "url": "https://api.fda.gov/drug/enforcement.json?search=report_date:[{from}+TO+{to}]&sort=report_date:desc&limit=100",
+      "product": "Medicine",
+      "kind": "Recall",
+      "enabled": true
+    },
+    {
+      "id": "fda-medwatch",
+      "agency": "FDA",
+      "country": "United States",
+      "name": "MedWatch safety alerts, device recalls and early alerts",
+      "type": "rss",
+      "url": "https://www.fda.gov/about-fda/contact-fda/stay-informed/rss-feeds/medwatch/rss.xml",
+      "enabled": true
+    },
+    {
+      "id": "fda-biologics",
+      "agency": "FDA",
+      "country": "United States",
+      "name": "What's new: vaccines, blood and biologics (CBER)",
+      "type": "rss",
+      "url": "https://www.fda.gov/about-fda/contact-fda/stay-informed/rss-feeds/biologics/rss.xml",
+      "product": "Biologic / vaccine",
+      "enabled": true
+    },
+    {
+      "id": "mhra-alerts",
+      "agency": "MHRA",
+      "country": "United Kingdom",
+      "name": "Drug and device alerts (national patient safety alerts, device safety information, recalls)",
+      "type": "govuk_search",
+      "url": "https://www.gov.uk/api/search.json?filter_format=medical_safety_alert&order=-public_timestamp&count=100&fields=title,link,public_timestamp,description,alert_type,medical_specialism",
+      "enabled": true
+    },
+    {
+      "id": "mhra-dsu",
+      "agency": "MHRA",
+      "country": "United Kingdom",
+      "name": "Drug Safety Update",
+      "type": "govuk_search",
+      "url": "https://www.gov.uk/api/search.json?filter_format=drug_safety_update&order=-public_timestamp&count=50&fields=title,link,public_timestamp,description",
+      "kind": "Safety communication",
+      "enabled": true
+    },
+    {
+      "id": "healthcanada",
+      "agency": "Health Canada",
+      "country": "Canada",
+      "name": "Recalls and safety alerts (health products and medical devices)",
+      "type": "healthcanada_json",
+      "url": "https://recalls-rappels.canada.ca/sites/default/files/opendata-donneesouvertes/HCRSAMOpenData.json",
+      "enabled": true
+    },
+    {
+      "id": "tga-alerts",
+      "agency": "TGA",
+      "country": "Australia",
+      "name": "All alerts (recalls, safety alerts, product defects)",
+      "type": "rss",
+      "url": "https://www.tga.gov.au/feeds/alert.xml",
+      "enabled": true
+    },
+    {
+      "id": "tga-safety-updates",
+      "agency": "TGA",
+      "country": "Australia",
+      "name": "Safety updates",
+      "type": "rss",
+      "url": "https://www.tga.gov.au/feeds/article/safety-updates.xml",
+      "kind": "Safety communication",
+      "enabled": true
+    },
+    {
+      "id": "pmda-safety",
+      "agency": "PMDA / MHLW",
+      "country": "Japan",
+      "name": "Safety measures (precaution revisions, MHLW safety information, risk communications)",
+      "type": "rss",
+      "url": "https://www.pmda.go.jp/rss_013.xml",
+      "kind": "Safety communication",
+      "enabled": true
+    }
+  ],
+  "watch_list": [
+    { "agency": "European Commission / MDCG", "name": "MDCG endorsed guidance documents", "url": "https://health.ec.europa.eu/medical-devices-sector/new-regulations/guidance-mdcg-endorsed-documents-and-other-guidance_en", "note": "Guidance, not alerts. The EU has no public central vigilance feed; field safety notices are published by each national competent authority." },
+    { "agency": "IMDRF", "name": "IMDRF documents", "url": "https://www.imdrf.org/documents", "note": "Harmonised guidance and consultations; IMDRF does not issue product alerts." },
+    { "agency": "BfArM", "country": "Germany", "name": "Field safety notices (Kundeninformationen)", "url": "https://www.bfarm.de/EN/Medical-devices/Tasks/Risk-assessment-and-research/Field-corrective-actions/_node.html" },
+    { "agency": "Swissmedic", "country": "Switzerland", "name": "Field safety notices", "url": "https://www.swissmedic.ch/swissmedic/en/home/medical-devices/market-surveillance/field-safety-notices.html" },
+    { "agency": "HPRA", "country": "Ireland", "name": "Safety notices and field safety notices", "url": "https://www.hpra.ie/homepage/medical-devices/safety-information" },
+    { "agency": "ANSM", "country": "France", "name": "Informations de sécurité", "url": "https://ansm.sante.fr/informations-de-securite" },
+    { "agency": "HSA", "country": "Singapore", "name": "Field safety notices", "url": "https://www.hsa.gov.sg/announcements/field-safety-notice" },
+    { "agency": "PMDA", "country": "Japan", "name": "Medical device safety information (English)", "url": "https://www.pmda.go.jp/english/safety/info-services/devices/0007.html" },
+    { "agency": "WHO", "name": "Medical product alerts (substandard and falsified)", "url": "https://www.who.int/teams/regulation-prequalification/incidents-and-SF/full-list-of-who-medical-product-alerts" },
+    { "agency": "EMA", "name": "Safety communications and DHPCs", "url": "https://www.ema.europa.eu/en/human-regulatory-overview/post-authorisation/pharmacovigilance-post-authorisation/direct-healthcare-professional-communications-dhpcs" }
+  ]
+}
