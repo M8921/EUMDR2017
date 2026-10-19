@@ -65,3 +65,14 @@ Two passes over v4. The first checked each MDR rule against the Annex VIII text.
 | 35 | The form did not define the central circulatory system or the central nervous system. Users could tick "direct contact" for a femoral-artery device, which is not central, and get class III. | Annex VIII 1.7, 1.8 | The vessel list and CNS definition are shown in section 7. |
 | 36 | "Reusable surgical instrument" was not defined. Powered or active-connected instruments could be marked Ir. | Annex VIII Chapter I definitions | Definition shown next to the checkbox. |
 | 37 | Implementing rule 3.4 (use in several parts of the body: classify on the most critical use) was not mentioned. | Annex VIII 3.4 | Hint added to the duration section. |
+
+## Third review (19 October 2026)
+
+A third pass covered the form logic (every input reaches the engine), the conformity routes and special cases.
+
+| # | Finding | Provision | Fix |
+|---|---------|-----------|-----|
+| 38 | Implantable class IIb devices on the well-established technology list (sutures, staples, wires, pins, clips, connectors) could not be flagged unless they were joint or spinal components. They were told every device needs a technical documentation assessment. | Art. 52(4), 61(6)(b) | Added a checkbox for the listed devices; the sampling route and exemption note now apply. |
+| 39 | Custom-made devices were given the CE-marking route. They follow Annex XIII, and only implantable class III custom-made devices need a Notified Body (Annex IX Chapter I or Annex XI Part A). | Art. 2(3), 52(8) | Added a custom-made checkbox; the route now leads with the Annex XIII procedure. |
+
+The other parts of the engine were rechecked and no further change was needed.

@@ -53,7 +53,7 @@
   /*
    * MDR device profile (all fields optional; omitted means "no" / "none"):
    *
-   * qualification: { pim: bool, noMedicalPurpose: bool, annexXVI: bool, accessory: bool }
+   * qualification: { pim: bool, noMedicalPurpose: bool, annexXVI: bool, accessory: bool, customMade: bool }
    * invasiveness:  'non_invasive' | 'orifice' | 'surgical' | 'implantable'
    * duration:      'transient' | 'short' | 'long'          (Annex VIII 1.1-1.3)
    * replacedImmediately: bool, accumulatedDuration: same as duration (3.6(b))
@@ -70,7 +70,9 @@
    *                  ionisingRadiation, biologicalEffectOrAbsorbed, chemicalChange,
    *                  administersMedicinal, administersMedicinalHazardous, placedInTeeth,
    *                  activeImplantable, breastImplantOrMesh, jointReplacement,
-   *                  spinalContact, ancillaryComponent }                  Rules 6-8
+   *                  spinalContact, ancillaryComponent,
+   *                  wetListed }   suture, staple, dental filling, brace, crown, screw, wedge, plate, wire, pin, clip, connector
+   *                                                                       Rules 6-8, Art. 52(4), 61(6)(b)
    * active:        { isActive, therapeuticEnergy, therapeuticEnergyHazardous,
    *                  controlsActiveTherapeuticIIb, therapeuticIonising, controlsActiveImplantable,  Rule 9
    *                  diagnosticEnergyAbsorbed, illuminatesVisibleOnly, radiopharmaceuticalImaging,
@@ -381,7 +383,8 @@
     const conformity = mdrConformity(finalClass, {
       subClasses,
       implantable,
-      wetExempt: s.ancillaryComponent || s.placedInTeeth,
+      wetExempt: s.ancillaryComponent || s.wetListed,
+      customMade: !!q.customMade,
       rule12IIb: hits.some((h) => h.rule === 'Rule 12' && h.class === 'IIb'),
       rule14: ruleNumbers('Rule 14'),
       rule18Human: sp.tissues === 'human',
@@ -457,6 +460,11 @@
     }
     if ((cls === 'III' && o.implantable) || o.rule12IIb) {
       route.push('Art. 54(2) lists the cases where this consultation is not required, such as certain modifications of a certified device or compliance with Common Specifications.');
+    }
+    if (o.customMade) {
+      route.unshift(o.implantable && cls === 'III'
+        ? 'Custom-made implantable class III device: Annex XIII statement, plus Annex IX Chapter I or Annex XI Part A by a Notified Body (Art. 52(8)). The routes below apply to series-produced devices only.'
+        : 'Custom-made device: Annex XIII procedure and statement, no CE marking or Notified Body certificate (Art. 52(8)). The routes below apply to series-produced devices only.');
     }
     if (o.rule14) route.push('Rule 14: Notified Body must consult a medicines authority or the EMA on the ancillary medicinal substance (Annex IX Section 5.2).');
     if (o.rule18Human) route.push('Rule 18 (human tissue): consult a competent authority for human tissues and cells (Annex IX Section 5.3).');
