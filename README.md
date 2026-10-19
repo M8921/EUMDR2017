@@ -20,6 +20,8 @@ Open `index.html` in a browser. It needs no build step or server and also works 
 | `index.html`, `style.css` | The form and the result panel. |
 | `test/engine.test.js` | 108 reference cases based on Annex VIII and the examples in MDCG 2021-24 and MDCG 2020-16. |
 | `REVIEW.md` | Flaws found in v3 and how v4 fixes them. |
+| `server.py` | Local server for both pages, with the alerts refresh endpoint. |
+| `alerts.html`, `alerts.js`, `alerts/` | Global alerts tracker: page, feed list (`sources.json`) and collector. |
 
 ## Tests
 
@@ -33,8 +35,25 @@ This is decision support. Under Art. 51 the manufacturer is responsible for clas
 
 ## Run on localhost
 
-```
-python -m http.server 8000
-```
+On Windows double-click `start-windows.bat`; on macOS or Linux run `sh start-mac-linux.sh`. Both run `python server.py` (Python 3.8 or later, no packages to install) and open:
 
-Then open http://localhost:8000. On Windows you can double-click `start-windows.bat`; on macOS or Linux run `sh start-mac-linux.sh`.
+- http://localhost:8000/ for the classification engine
+- http://localhost:8000/alerts.html for the global alerts tracker
+
+## Global alerts tracker
+
+`alerts.html` lists recalls, field safety notices, early alerts, safety communications, bans and quality concerns from the last 12 months, with filters by regulator, type of notice, product (device, medicine, biologic or vaccine), period and keyword.
+
+| Regulator | Feeds |
+|-----------|-------|
+| FDA (US) | Device and drug enforcement reports (openFDA), MedWatch safety alerts and device early alerts, CBER biologics updates |
+| MHRA (UK) | Drug and device alerts, Drug Safety Update |
+| Health Canada | Recalls and safety alerts for medical devices and health products |
+| TGA (Australia) | All alerts, safety updates |
+| PMDA / MHLW (Japan) | Safety measures |
+
+The EU (MDCG), IMDRF, BfArM, Swissmedic, HPRA, ANSM, HSA, EMA and WHO do not publish a feed that can be read automatically, so the page links to their pages instead.
+
+`server.py` collects the alerts when it starts, if the saved copy is older than 6 hours, and when you press **Refresh from regulators**. You can also run `python alerts/collector.py` on its own. Feeds are configured in `alerts/sources.json`; a feed that fails is shown with its error under Sources and the others still load. Notice types and product types are assigned by keyword, so always read the original notice.
+
+Collector tests: `python -m unittest discover -s test -p "test_*.py"`

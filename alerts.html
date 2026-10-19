@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Global Device &amp; Medicine Alerts</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="page">
+    <nav class="topnav">
+      <a href="index.html">Classification engine</a>
+      <a href="alerts.html" aria-current="page">Global alerts</a>
+    </nav>
+
+    <header>
+      <h1>Global safety alerts</h1>
+      <p>Recalls, field safety notices, safety communications, bans and quality concerns published by FDA, MHRA, Health Canada, TGA and PMDA over the last 12 months.</p>
+    </header>
+
+    <section class="card toolbar">
+      <div class="toolbar-grid">
+        <label>Search
+          <input type="search" id="f_text" placeholder="Device, firm, substance, reason&hellip;" />
+        </label>
+        <label>Regulator
+          <select id="f_agency"><option value="">All regulators</option></select>
+        </label>
+        <label>Type of notice
+          <select id="f_kind"><option value="">All types</option></select>
+        </label>
+        <label>Product
+          <select id="f_product"><option value="">All products</option></select>
+        </label>
+        <label>Period
+          <select id="f_days">
+            <option value="7">Last 7 days</option>
+            <option value="30" selected>Last 30 days</option>
+            <option value="90">Last 90 days</option>
+            <option value="365">Last 12 months</option>
+          </select>
+        </label>
+      </div>
+      <div class="toolbar-foot">
+        <span id="collected" class="hint"></span>
+        <button type="button" id="refresh_btn">Refresh from regulators</button>
+      </div>
+    </section>
+
+    <div id="kind_counts" class="chips" aria-label="Counts by type of notice"></div>
+
+    <section id="empty_state" class="card" hidden>
+      <h2>No alerts collected yet</h2>
+      <p id="empty_text">Start the engine with <code>start-windows.bat</code> or <code>sh start-mac-linux.sh</code>. It collects the alerts automatically, which takes about a minute the first time. You can also run <code>python alerts/collector.py</code> and reload this page.</p>
+    </section>
+
+    <p id="result_count" class="hint"></p>
+    <ol id="alert_list" class="alert-list"></ol>
+
+    <section class="card">
+      <h2>Sources</h2>
+      <table class="sources-table">
+        <thead><tr><th>Regulator</th><th>Feed</th><th>Items</th><th>Status</th></tr></thead>
+        <tbody id="sources_body"></tbody>
+      </table>
+    </section>
+
+    <section class="card">
+      <h2>Also check (no machine-readable feed)</h2>
+      <ul id="watch_list" class="watch-list"></ul>
+    </section>
+
+    <p class="disclaimer">Notices are copied from each regulator's public feed and labelled automatically by keyword. Always read the original notice before acting on it.</p>
+  </div>
+
+  <script src="alerts.js"></script>
+</body>
+</html>
